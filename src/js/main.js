@@ -1,5 +1,7 @@
 "use strict";
 
+console.log("jola 2 ");
+
 // constantes
 const searchInput = document.querySelector(".js-input");
 const searchBtn = document.querySelector(".js-searchBtn");
