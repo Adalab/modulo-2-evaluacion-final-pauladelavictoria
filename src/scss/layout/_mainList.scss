@@ -1,0 +1,32 @@
+.main {
+  height: $height;
+  overflow-y: auto;
+  &-ul {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.listEl {
+  @include columnCentered;
+  width: 33.3%;
+  height: 400px;
+  background-size: cover;
+  position: relative;
+}
+
+.divText {
+  text-align: center;
+  background-color: $color-bluetrans;
+  @include font;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  color: white;
+  padding: 5px;
+  line-height: 0.9em;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

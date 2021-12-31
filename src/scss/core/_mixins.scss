@@ -1,0 +1,11 @@
+
+@mixin columnCentered() {
+	display: flex;
+	flex-direction: column;
+}
+
+@mixin font(){
+	font-size: 25px;
+	font-family: $font-main;
+}
+

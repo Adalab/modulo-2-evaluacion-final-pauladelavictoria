@@ -1,0 +1,23 @@
+.header{
+    height: $height;
+    background-color: $color-mustard;
+@include columnCentered;
+@include font;
+padding: 40px;
+&-label{
+    padding: 10px;
+}
+    &-input{
+        border: 1px solid white;
+        border-radius: 50px;
+        padding: 5px 10px 5px 20px;
+    }
+    &-btn{
+        background-color: $color-blue;
+        padding: 5px;
+        margin-top: 5px;
+        border-radius: 50px;
+        color: white;
+    }
+}
+
