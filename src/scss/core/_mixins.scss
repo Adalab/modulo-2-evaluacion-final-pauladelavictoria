@@ -9,3 +9,15 @@
 	font-family: $font-main;
 }
 
+@mixin background(){
+	text-align: center;
+  @include font;
+  width: 100%;
+  color: white;
+  padding: 5px;
+  line-height: 0.9em;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
