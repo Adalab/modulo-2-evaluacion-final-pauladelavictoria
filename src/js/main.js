@@ -4,13 +4,19 @@
 const searchInput = document.querySelector(".js-input");
 const searchBtn = document.querySelector(".js-searchBtn");
 const serieList = document.querySelector(".js-serieList");
-const mainContainer = document.querySelector(".main");
+const mainContainer = document.querySelector(".js-main");
+
+// variables globales
+let noList;
 
 // Evento y función para buscar las series
 searchBtn.addEventListener("click", searchSerie);
 
 function searchSerie() {
-  
+  if(noList !== undefined){
+    noList.innerHTML = "";
+    noList.classList.remove("notFound");
+  } 
   fetch(`https://api.jikan.moe/v3/search/anime?q=${searchInput.value}`)
     .then((response) => response.json())
     .then((data) => {
@@ -19,7 +25,7 @@ function searchSerie() {
       if (data.results.length > 0) {
         paintSeries(data.results);
       } else {
-        const noList = document.createElement("p");
+        noList = document.createElement("p");
         noList.classList.add("notFound");
         const noListText = document.createTextNode(
           "No tenemos la serie que buscas, prueba otra 🙈"
@@ -32,6 +38,8 @@ function searchSerie() {
 
 // función para pintar cada serie
 function paintSeries(arrSeries) {
+    serieList.innerHTML = "";
+  
   for (const eachSerie of arrSeries) {
     // crear el li, div, e id
     const listEl = document.createElement("li");
@@ -60,7 +68,7 @@ function paintSeries(arrSeries) {
     // clase para cambiar el li en css
     listEl.classList.add("listEl");
 
-    // Evento para añadir a favorito
+    // Evento para añadir a favorito, dentro de la función que es donde se crea el listEl
     listEl.addEventListener("click", addFav);
   }
 }
