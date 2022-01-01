@@ -73,7 +73,11 @@ function paintSeries(arrSeries) {
   }
 }
 
+
+
+
 // LOCALSTORAGE
+// El evento de addFav está arriba, en la función paintSeries 
 
 // Array vacío donde se van a guardar los id de los fav
 let idFav = [];
@@ -83,3 +87,28 @@ function addFav(event) {
   idFav.push(event.currentTarget.id);
   localStorage.setItem("idFav", JSON.stringify(idFav));
 }
+
+
+
+
+
+// RESET
+
+// constantes 
+const resetFav = document.querySelector(".js-resetFav");
+const resetBtn = document.querySelector(".js-resetBtn");
+
+// Evento y función para borrar las series de la búsqueda 
+resetBtn.addEventListener('click', resetSearchseries);
+function resetSearchseries(){
+  location.reload();
+}
+
+// Evento y función para borrar las series favoritas 
+resetFav.addEventListener('click', resetFavseries);
+function resetFavseries(){
+  localStorage.setItem("idFav", "[]");
+  idFav = [];
+}
+
+
