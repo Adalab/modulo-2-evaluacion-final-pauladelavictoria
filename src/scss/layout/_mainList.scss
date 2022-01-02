@@ -18,6 +18,17 @@
   position: relative;
 }
 
+.favStyle{
+  border: 20px solid $color-pink;
+  &::after{
+  content: "💝";
+  font-size: 50px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  }
+}
+
 .divText {
   @include background;
   background-color: $color-bluetrans;

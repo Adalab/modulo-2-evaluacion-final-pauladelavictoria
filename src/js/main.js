@@ -13,10 +13,10 @@ let noList;
 searchBtn.addEventListener("click", searchSerie);
 
 function searchSerie() {
-  if(noList !== undefined){
+  if (noList !== undefined) {
     noList.innerHTML = "";
     noList.classList.remove("notFound");
-  } 
+  }
   fetch(`https://api.jikan.moe/v3/search/anime?q=${searchInput.value}`)
     .then((response) => response.json())
     .then((data) => {
@@ -38,13 +38,22 @@ function searchSerie() {
 
 // función para pintar cada serie
 function paintSeries(arrSeries) {
-    serieList.innerHTML = "";
-  
+  serieList.innerHTML = "";
+
   for (const eachSerie of arrSeries) {
     // crear el li, div, e id
     const listEl = document.createElement("li");
     const container = document.createElement("div");
-    listEl.setAttribute("id", eachSerie.mal_id);
+
+    // Añadir atributos al dataset para guardarlos en el localstorage cuando son fav
+    // listEl.dataset.mal_id = eachSerie.mal_id;
+    // listEl.dataset.title = eachSerie.title;
+
+    listEl.setAttribute("data-mal_id", eachSerie.mal_id);
+    listEl.setAttribute("data-title", eachSerie.title);
+    listEl.setAttribute("data-image_url", eachSerie.image_url);
+    listEl.setAttribute("data-synopsis", eachSerie.synopsis);
+
     // Crear la imagen si no fuese background
     // const listImg = document.createElement('img');
     // listImg.setAttribute('src', eachSerie.image_url);
@@ -68,47 +77,54 @@ function paintSeries(arrSeries) {
     // clase para cambiar el li en css
     listEl.classList.add("listEl");
 
+    // clases para fav cuando ya esté guardado en el localstorage para que si refrescas la página no se borre la clase
+    // if (
+    //   arrAnimes.includes((eachAnime) => {
+    //     return eachAnime.mal_id === eachSerie.mal_id;
+    //   })
+    // )
+
+    for (const eachAnime of arrAnimes) {
+      if (parseInt(eachAnime.mal_id) === eachSerie.mal_id) {
+        listEl.classList.add("favStyle");
+      }
+    }
+
     // Evento para añadir a favorito, dentro de la función que es donde se crea el listEl
     listEl.addEventListener("click", addFav);
   }
 }
 
-
-
-
 // LOCALSTORAGE
-// El evento de addFav está arriba, en la función paintSeries 
+// El evento de addFav está arriba, en la función paintSeries
 
-// Array vacío donde se van a guardar los id de los fav
-let idFav = [];
+// Array vacío donde se van a guardar los datos de los fav
+let arrAnimes = JSON.parse(localStorage.getItem("favAnimes"));
 
-// función para guardar como fav
+// función para guardar como fav y añadir la clase de fav al hacer click, pero si refrescas la página se borraría la clase aunque se guarden el resto de datos del elemento en el array
 function addFav(event) {
-  idFav.push(event.currentTarget.id);
-  localStorage.setItem("idFav", JSON.stringify(idFav));
+  arrAnimes.push(event.currentTarget.dataset);
+  localStorage.setItem("favAnimes", JSON.stringify(arrAnimes));
+  event.currentTarget.classList.add("favStyle");
 }
 
-
-
-
+// función para pintar los favoritos desde local storage
 
 // RESET
 
-// constantes 
+// constantes
 const resetFav = document.querySelector(".js-resetFav");
 const resetBtn = document.querySelector(".js-resetBtn");
 
-// Evento y función para borrar las series de la búsqueda 
-resetBtn.addEventListener('click', resetSearchseries);
-function resetSearchseries(){
+// Evento y función para borrar las series de la búsqueda
+resetBtn.addEventListener("click", resetSearchseries);
+function resetSearchseries() {
   location.reload();
 }
 
-// Evento y función para borrar las series favoritas 
-resetFav.addEventListener('click', resetFavseries);
-function resetFavseries(){
-  localStorage.setItem("idFav", "[]");
-  idFav = [];
+// Evento y función para borrar las series favoritas
+resetFav.addEventListener("click", resetFavseries);
+function resetFavseries() {
+  localStorage.setItem("favAnimes", "[]");
+  arrAnimes = [];
 }
-
-
