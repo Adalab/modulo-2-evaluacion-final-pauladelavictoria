@@ -5,6 +5,7 @@ const searchInput = document.querySelector(".js-input");
 const searchBtn = document.querySelector(".js-searchBtn");
 const serieList = document.querySelector(".js-serieList");
 const mainContainer = document.querySelector(".js-main");
+const seriesFavlist = document.querySelector(".js-favAnime");
 
 // variables globales
 let noList;
@@ -41,7 +42,7 @@ function paintSeries(arrSeries) {
   serieList.innerHTML = "";
 
   for (const eachSerie of arrSeries) {
-    // crear el li, div, e id
+    // crear el li y div
     const listEl = document.createElement("li");
     const container = document.createElement("div");
 
@@ -95,20 +96,52 @@ function paintSeries(arrSeries) {
   }
 }
 
+
 // LOCALSTORAGE
 // El evento de addFav está arriba, en la función paintSeries
 
 // Array vacío donde se van a guardar los datos de los fav
 let arrAnimes = JSON.parse(localStorage.getItem("favAnimes"));
 
+// Llamada a la función que pinta el localStorage para que al cargar la página aparezcan los fav que ya están guardados
+paintFavseries(arrAnimes);
+
+
 // función para guardar como fav y añadir la clase de fav al hacer click, pero si refrescas la página se borraría la clase aunque se guarden el resto de datos del elemento en el array
 function addFav(event) {
   arrAnimes.push(event.currentTarget.dataset);
   localStorage.setItem("favAnimes", JSON.stringify(arrAnimes));
-  event.currentTarget.classList.add("favStyle");
+  event.currentTarget.classList.toggle("favStyle");
+  paintFavseries(arrAnimes);
 }
 
-// función para pintar los favoritos desde local storage
+//función para pintar los favoritos desde local storage
+function paintFavseries(arrAnimes) {
+  for (const eachAnime of arrAnimes) {
+    // crear el li, div, imagen de fondo y texto con el título y sinopsis
+    const listFavel = document.createElement("li");
+    const containerFav = document.createElement("div");
+    const listImg = document.createElement('img');
+    listImg.setAttribute('src', eachAnime.image_url);
+    listImg.classList.add('listImg');
+    const listFavtext = document.createTextNode(eachAnime.title);
+    const listFavsyn = document.createTextNode(eachAnime.synopsis);
+
+    // El ul tiene un li, con un contenedor y el texto dentro del contenedor div
+    seriesFavlist.appendChild(containerFav);
+    containerFav.appendChild(listFavel);
+    listFavel.appendChild(listFavtext);
+    listFavel.appendChild(listFavsyn);
+    listFavel.appendChild(listImg);
+
+    // clase para cambiar el li y container en css
+    listFavel.classList.add("listFavel");
+    containerFav.classList.add("divFav");
+  }
+}
+
+
+
 
 // RESET
 
@@ -127,4 +160,5 @@ resetFav.addEventListener("click", resetFavseries);
 function resetFavseries() {
   localStorage.setItem("favAnimes", "[]");
   arrAnimes = [];
+  seriesFavlist.innerHTML = "";
 }
