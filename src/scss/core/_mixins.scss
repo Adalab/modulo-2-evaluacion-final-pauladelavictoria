@@ -1,11 +1,31 @@
-
 @mixin columnCentered() {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-@mixin font(){
-	font-size: 25px;
-	font-family: $font-main;
+@mixin font() {
+  font-size: 25px;
+  font-family: $font-main;
 }
 
+@mixin background() {
+  text-align: center;
+  @include font;
+  width: 100%;
+  color: white;
+  padding: 5px;
+  line-height: 0.9em;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin reset() {
+  background-color: #9ab9c2;
+  font-size: 130%;
+  padding: 15px;
+  margin-top: 5px;
+  border-radius: 50px;
+  position: absolute;
+}
