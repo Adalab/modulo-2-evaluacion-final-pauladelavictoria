@@ -85,7 +85,7 @@ function paintSeries(arrSeries) {
     for (const eachAnime of arrAnimes) {
       if (parseInt(eachAnime.mal_id) === eachSerie.mal_id) {
         listEl.classList.add("favStyle");
-      } 
+      }
     }
 
     // Evento para añadir a favorito, dentro de la función que es donde se crea el listEl
@@ -103,19 +103,17 @@ paintFavseries(arrAnimes);
 
 // función para guardar como fav y añadir la clase de fav al hacer click, pero si refrescas la página se borraría la clase aunque se guarden el resto de datos del elemento en el array
 function addFav(event) {
-  if (!arrAnimes.includes(event.currentTarget.dataset)) {
+  const addfavindex = arrAnimes.findIndex((an) => event.currentTarget.dataset.mal_id === an.mal_id);
+  if (addfavindex === -1) {
     arrAnimes.push(event.currentTarget.dataset);
     localStorage.setItem("favAnimes", JSON.stringify(arrAnimes));
     event.currentTarget.classList.add("favStyle");
     paintFavseries(arrAnimes);
-    // } else {
-    //   const indexAnime = arrAnimes.findIndex(
-    //     (animeIndex) => event.currentTarget.dataset.mal_id === animeIndex.mal_id
-    //   );
-    //   arrAnimes.splice(indexAnime, 1);
-    //   localStorage.setItem("favAnimes", JSON.stringify(arrAnimes));
-    //   paintFavseries(arrAnimes);
-    //   paintSeries(searchResults);
+  } else {
+    arrAnimes.splice(addfavindex, 1);
+    localStorage.setItem("favAnimes", JSON.stringify(arrAnimes));
+    event.currentTarget.classList.remove("favStyle");
+    paintFavseries(arrAnimes);
   }
 }
 
