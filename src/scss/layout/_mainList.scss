@@ -1,6 +1,9 @@
 .main {
+  width: 100%;
   height: $height;
   overflow-y: auto;
+  background-image: url("../images/HD-wallpaper-anime-girl-sea-sky-clouds-landscape-art-anime-girl-anime-clouds-landscape-artist-artwork-digital-art.jpg");
+  background-size: cover;
   &-ul {
     display: flex;
     flex-wrap: wrap;
@@ -15,18 +18,30 @@
   position: relative;
 }
 
-.divText {
-  text-align: center;
-  background-color: $color-bluetrans;
-  @include font;
+.favStyle{
+  border: 20px solid $color-pink;
+  &::after{
+  content: "💝";
+  font-size: 50px;
   position: absolute;
-  width: 100%;
+  top: 0;
+  right: 0;
+  }
+}
+
+.divText {
+  @include background;
+  background-color: $color-bluetrans;
+  position: absolute;
   bottom: 0;
-  color: white;
-  padding: 5px;
-  line-height: 0.9em;
-  min-height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  
+}
+
+.notFound {
+  @include background;
+  background-color: $color-pink;
+  font-size: 40px;
+  width: 70%;
+  margin: 200px auto;
+  padding: 50px;
 }
