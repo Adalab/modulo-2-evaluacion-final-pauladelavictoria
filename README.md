@@ -14,7 +14,7 @@ Este proyecto es un  **buscador de series anime**.
 > **NOTA:** Si no quieres borrar todas tus series fav, puedes pulsar en la X roja cuando están en la lista de preferidas, o pinchar de nuevo cuando aparezcan en la búsqueda.
 
 
-### Crado por 🖋️:
+### Creado por 🖋️:
 Paula de la Victoria, para finalizar el módulo 2 de Adalab.
 
 > **NOTA:** Cualquier información que busques sobre el funcionamiento de JS, puedes encontrarla en los comentarios del código.
