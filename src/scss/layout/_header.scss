@@ -47,3 +47,22 @@
     background-color: $color-blue;
   }
 }
+
+.favAnime-title{
+  background-color: $color-pink;
+  margin-top: 10px;
+  color: white;
+  padding: 5px;
+  text-align: center;
+}
+
+.favAnime{
+  margin-top: 10px;
+  height: 400px;
+overflow-y: auto;
+}
+
+.listFavel{
+  @include columnCentered();
+font-size: 20px;
+}

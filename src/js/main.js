@@ -9,13 +9,16 @@ const seriesFavlist = document.querySelector(".js-favAnime");
 
 // variables globales
 let noList;
+let searchResults;
 
 // Evento y función para buscar las series
 searchBtn.addEventListener("click", searchSerie);
 
-let searchResults;
+// Array vacío donde se van a guardar los datos de los fav
+let arrAnimes = JSON.parse(localStorage.getItem("favAnimes"));
 
-function searchSerie() {
+function searchSerie(ev) {
+  ev.preventDefault();
   if (noList !== undefined) {
     noList.innerHTML = "";
     noList.classList.remove("notFound");
@@ -25,6 +28,8 @@ function searchSerie() {
     .then((data) => {
       // arrSeries se cambia por data.result para darle ese valor al parámetro que tiene la función
       // Condicional por si no existe en la API la serie que se busca
+      if (data.results === null) data.results = [];
+
       if (data.results.length > 0) {
         searchResults = data.results;
         paintSeries(searchResults);
@@ -58,25 +63,15 @@ function paintSeries(arrSeries) {
     listEl.setAttribute("data-image_url", eachSerie.image_url);
     listEl.setAttribute("data-synopsis", eachSerie.synopsis);
 
-    // Crear la imagen si no fuese background
-    // const listImg = document.createElement('img');
-    // listImg.setAttribute('src', eachSerie.image_url);
-    // listEl.appendChild(listImg);
-    // listImg.classList.add('listImg');
-
     // Imagen de fondo y texto
-    const listText = document.createTextNode(eachSerie.title);
-    container.appendChild(listText);
-    container.classList.add("divText");
-    if (
-      eachSerie.image_url ===
-      `https://cdn.myanimelist.net/images/qm_50.gif?s=e1ff92a46db617cb83bfc1e205aff620`
-    ) {
-      listEl.style.backgroundImage = `url(https://via.placeholder.com/300x400/f96457/ffffff/?text=${eachSerie.title})`;
-    } else {
+    if (eachSerie.image_url) {
       listEl.style.backgroundImage = `url(${eachSerie.image_url})`;
+      const listText = document.createTextNode(eachSerie.title);
+      container.appendChild(listText);
+      container.classList.add("divText");
+    } else {
+      listEl.style.backgroundImage = `url(https://via.placeholder.com/400x400/f96457/ffffff/?text=${eachSerie.title})`;
     }
-
     // El ul tiene un li, con un contenedor y el texto dentro del contenedor div
     serieList.appendChild(listEl);
     listEl.appendChild(container);
@@ -84,28 +79,22 @@ function paintSeries(arrSeries) {
     // clase para cambiar el li en css
     listEl.classList.add("listEl");
 
+    if (arrAnimes === null) arrAnimes = [];
+
     // clases para fav cuando ya esté guardado en el localstorage para que si refrescas la página no se borre la clase
-    // if (
-    //   arrAnimes.includes((eachAnime) => {
-    //     return eachAnime.mal_id === eachSerie.mal_id;
-    //   })
-    // )
     for (const eachAnime of arrAnimes) {
       if (parseInt(eachAnime.mal_id) === eachSerie.mal_id) {
         listEl.classList.add("favStyle");
-      }
+      } 
     }
 
     // Evento para añadir a favorito, dentro de la función que es donde se crea el listEl
     listEl.addEventListener("click", addFav);
   }
 }
-
 // LOCALSTORAGE
 // El evento de addFav está arriba, en la función paintSeries
 
-// Array vacío donde se van a guardar los datos de los fav
-let arrAnimes = JSON.parse(localStorage.getItem("favAnimes"));
 // si no hay favoritos en el localStorage le asignamos un array vacío para que nunca sea null y no den error las funciones
 if (arrAnimes === null) arrAnimes = [];
 
@@ -119,15 +108,15 @@ function addFav(event) {
     localStorage.setItem("favAnimes", JSON.stringify(arrAnimes));
     event.currentTarget.classList.add("favStyle");
     paintFavseries(arrAnimes);
+    // } else {
+    //   const indexAnime = arrAnimes.findIndex(
+    //     (animeIndex) => event.currentTarget.dataset.mal_id === animeIndex.mal_id
+    //   );
+    //   arrAnimes.splice(indexAnime, 1);
+    //   localStorage.setItem("favAnimes", JSON.stringify(arrAnimes));
+    //   paintFavseries(arrAnimes);
+    //   paintSeries(searchResults);
   }
-  // else {
-  //   arrAnimes = arrAnimes.filter(
-  //     (anime) => event.currentTarget.dataset.mal_id !== anime.mal_id
-  //   );
-  //   localStorage.setItem("favAnimes", JSON.stringify(arrAnimes));
-  //   event.currentTarget.classList.remove("favStyle");
-  //   paintFavseries(arrAnimes);
-  // }
 }
 
 //función para pintar los favoritos desde local storage
@@ -144,7 +133,6 @@ function paintFavseries(arrAnimes) {
     const listImg = document.createElement("img");
     listImg.classList.add("listImg");
     const listFavtext = document.createTextNode(eachAnime.title);
-    const listFavsyn = document.createTextNode(eachAnime.synopsis);
 
     if (
       eachAnime.image_url ===
@@ -162,7 +150,6 @@ function paintFavseries(arrAnimes) {
     seriesFavlist.appendChild(containerFav);
     containerFav.appendChild(listFavel);
     listFavel.appendChild(listFavtext);
-    listFavel.appendChild(listFavsyn);
     listFavel.appendChild(listImg);
     listFavel.appendChild(deleteFav);
     deleteFav.appendChild(deleteFavtext);
@@ -198,6 +185,7 @@ function resetFavseries() {
   localStorage.setItem("favAnimes", "[]");
   arrAnimes = [];
   seriesFavlist.innerHTML = "";
+  paintSeries(searchResults);
 }
 
 // Función para borrar un favorito desde la lista de fav
