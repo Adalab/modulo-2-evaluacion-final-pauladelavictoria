@@ -6,6 +6,7 @@ const searchBtn = document.querySelector(".js-searchBtn");
 const serieList = document.querySelector(".js-serieList");
 const mainContainer = document.querySelector(".js-main");
 const seriesFavlist = document.querySelector(".js-favAnime");
+const titleFav = document.querySelector(".js-titleFav");
 
 // variables globales
 let noList;
@@ -62,6 +63,7 @@ function paintSeries(arrSeries) {
     listEl.setAttribute("data-title", eachSerie.title);
     listEl.setAttribute("data-image_url", eachSerie.image_url);
     listEl.setAttribute("data-synopsis", eachSerie.synopsis);
+    listEl.setAttribute("data-type", eachSerie.type);
 
     // Imagen de fondo y texto
     if (eachSerie.image_url) {
@@ -72,9 +74,12 @@ function paintSeries(arrSeries) {
     } else {
       listEl.style.backgroundImage = `url(https://via.placeholder.com/400x400/f96457/ffffff/?text=${eachSerie.title})`;
     }
+
+    const listtype = document.createTextNode(eachSerie.type);
     // El ul tiene un li, con un contenedor y el texto dentro del contenedor div
     serieList.appendChild(listEl);
     listEl.appendChild(container);
+    container.appendChild(listtype);
 
     // clase para cambiar el li en css
     listEl.classList.add("listEl");
@@ -103,7 +108,9 @@ paintFavseries(arrAnimes);
 
 // función para guardar como fav y añadir la clase de fav al hacer click, pero si refrescas la página se borraría la clase aunque se guarden el resto de datos del elemento en el array
 function addFav(event) {
-  const addfavindex = arrAnimes.findIndex((an) => event.currentTarget.dataset.mal_id === an.mal_id);
+  const addfavindex = arrAnimes.findIndex(
+    (an) => event.currentTarget.dataset.mal_id === an.mal_id
+  );
   if (addfavindex === -1) {
     arrAnimes.push(event.currentTarget.dataset);
     localStorage.setItem("favAnimes", JSON.stringify(arrAnimes));
@@ -123,6 +130,7 @@ function paintFavseries(arrAnimes) {
   for (const eachAnime of arrAnimes) {
     // crear el li, div, imagen de fondo y texto con el título y sinopsis
     const listFavel = document.createElement("li");
+    const listTexttype = document.createElement("p");
 
     const deleteFav = document.createElement("button");
     const deleteFavtext = document.createTextNode("❌");
@@ -131,6 +139,7 @@ function paintFavseries(arrAnimes) {
     const listImg = document.createElement("img");
     listImg.classList.add("listImg");
     const listFavtext = document.createTextNode(eachAnime.title);
+    const listFavtype = document.createTextNode(eachAnime.type);
 
     if (
       eachAnime.image_url ===
@@ -143,8 +152,9 @@ function paintFavseries(arrAnimes) {
     } else {
       listImg.setAttribute("src", eachAnime.image_url);
     }
-
     // El ul tiene un li, con un contenedor y el texto dentro del contenedor div
+    listTexttype.appendChild(listFavtype);
+    listFavel.appendChild(listTexttype);
     seriesFavlist.appendChild(containerFav);
     containerFav.appendChild(listFavel);
     listFavel.appendChild(listFavtext);
@@ -196,4 +206,12 @@ function deleteFavourite(event) {
 
   paintFavseries(arrAnimes);
   paintSeries(searchResults);
+}
+
+titleFav.addEventListener("click", paintFavtitle);
+
+function paintFavtitle() {
+  for (const serie of arrAnimes) {
+    console.log(serie.title);
+  }
 }
